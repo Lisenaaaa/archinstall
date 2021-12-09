@@ -46,12 +46,12 @@ def suggest_single_disk_layout(block_device, default_filesystem=None, advanced_o
 	})
 
 	# Set a size for / (/root)
-	if using_subvolumes or block_device.size < MIN_SIZE_TO_ALLOW_HOME_PART:
+	# if using_subvolumes or block_device.size < MIN_SIZE_TO_ALLOW_HOME_PART:
 		# We'll use subvolumes
 		# Or the disk size is too small to allow for a separate /home
-		layout[block_device.path]['partitions'][-1]['size'] = '100%'
-	else:
-		layout[block_device.path]['partitions'][-1]['size'] = f"{min(block_device.size, 20)}GB"
+	layout[block_device.path]['partitions'][-1]['size'] = '100%'
+	# else:
+	# 	layout[block_device.path]['partitions'][-1]['size'] = f"{min(block_device.size, 20)}GB"
 
 	if default_filesystem == 'btrfs' and using_subvolumes:
 		# if input('Do you want to use a recommended structure? (Y/n): ').strip().lower() in ('', 'y', 'yes'):
@@ -69,22 +69,22 @@ def suggest_single_disk_layout(block_device, default_filesystem=None, advanced_o
 		# else:
 		# 	pass # ... implement a guided setup
 
-	elif block_device.size >= MIN_SIZE_TO_ALLOW_HOME_PART:
-		# If we don't want to use subvolumes,
-		# But we want to be able to re-use data between re-installs..
-		# A second partition for /home would be nice if we have the space for it
-		layout[block_device.path]['partitions'].append({
-			# Home
-			"type" : "primary",
-			"encrypted" : False,
-			"format" : True,
-			"start" : f"{min(block_device.size+0.5, 20.5)}GB",
-			"size" : "100%",
-			"mountpoint" : "/home",
-			"filesystem" : {
-				"format" : default_filesystem
-			}
-		})
+	# elif block_device.size >= MIN_SIZE_TO_ALLOW_HOME_PART:
+	# 	# If we don't want to use subvolumes,
+	# 	# But we want to be able to re-use data between re-installs..
+	# 	# A second partition for /home would be nice if we have the space for it
+	# 	layout[block_device.path]['partitions'].append({
+	# 		# Home
+	# 		"type" : "primary",
+	# 		"encrypted" : False,
+	# 		"format" : True,
+	# 		"start" : f"{min(block_device.size+0.5, 20.5)}GB",
+	# 		"size" : "100%",
+	# 		"mountpoint" : "/home",
+	# 		"filesystem" : {
+	# 			"format" : default_filesystem
+	# 		}
+	# 	})
 
 	return layout
 
