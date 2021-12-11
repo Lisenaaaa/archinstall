@@ -10,7 +10,7 @@ if archinstall.arguments.get('help'):
 	print("See `man archinstall` for help.")
 	exit(0)
 if os.getuid() != 0:
-	print("Archinstall requires root privileges to run. See --help for more.")
+	print("alyssa-archinstall requires root privileges to run. See --help for more.")
 	exit(1)
 
 # Log various information about hardware before starting the installation. This might assist in troubleshooting
