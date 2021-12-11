@@ -2,7 +2,7 @@
 # Contributor: Giancarlo Razzolini <grazzolini@archlinux.org>
 # Contributor: demostanis worlds <demostanis@protonmail.com>
 
-pkgname=archinstall-git
+pkgname=alyssa-archinstall-git
 pkgver=$(git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g')
 pkgrel=1
 pkgdesc="Just another guided/automated Arch Linux installer with a twist"
