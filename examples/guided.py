@@ -351,10 +351,7 @@ def perform_installation(mountpoint):
 		if archinstall.arguments.get('custom-commands', None):
 			archinstall.run_custom_user_commands(archinstall.arguments['custom-commands'], installation)
 
-		# if not (handle := SysCommand(f'/usr/bin/arch-chroot {self.target} grub-mkconfig -o /boot/grub/grub.cfg')).exit_code == 0:
-		# 	raise DiskError(f"Could not configure GRUB: {handle}")
-
-		archinstall.run_custom_user_commands('grub-mkconfig -o /boot/grub/grub.cfg', installation)
+		archinstall.run_custom_user_commands(['grub-mkconfig -o /boot/grub/grub.cfg'], installation)
 
 		installation.log("For post-installation tips, see https://wiki.archlinux.org/index.php/Installation_guide#Post-installation", fg="yellow")
 		if not archinstall.arguments.get('silent'):
