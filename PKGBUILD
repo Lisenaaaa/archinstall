@@ -11,7 +11,7 @@ url="https://github.com/archlinux/archinstall"
 license=('GPL')
 depends=('python')
 makedepends=('python-setuptools' 'python-sphinx')
-provides=('alyssa-archinstall-git')
+provides=('archinstall-git')
 conflicts=('archinstall' 'python-archinstall' 'python-archinstall-git' 'archinstall-git')
 
 build() {
