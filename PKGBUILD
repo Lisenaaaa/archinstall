@@ -11,8 +11,8 @@ url="https://github.com/archlinux/archinstall"
 license=('GPL')
 depends=('python')
 makedepends=('python-setuptools' 'python-sphinx')
-provides=('python-archinstall')
-conflicts=('archinstall' 'python-archinstall' 'python-archinstall-git')
+provides=('alyssa-archinstall-git')
+conflicts=('archinstall' 'python-archinstall' 'python-archinstall-git' 'archinstall-git')
 
 build() {
         cd "$startdir"

@@ -470,9 +470,10 @@ def pid_exists(pid: int) -> bool:
 		return False
 
 
-def run_custom_user_commands(commands, installation):
+def run_custom_user_commands(commands, installation, showLog = True):
 	for index, command in enumerate(commands):
-		log(f'Executing custom command "{command}" ...', fg='yellow')
+		if showLog:
+			log(f'Executing custom command "{command}" ...', fg='yellow')
 		with open(f"{installation.target}/var/tmp/user-command.{index}.sh", "w") as temp_script:
 			temp_script.write(command)
 		execution_output = SysCommand(f"arch-chroot {installation.target} bash /var/tmp/user-command.{index}.sh")

@@ -351,10 +351,26 @@ def perform_installation(mountpoint):
 		if archinstall.arguments.get('custom-commands', None):
 			archinstall.run_custom_user_commands(archinstall.arguments['custom-commands'], installation)
 
-		archinstall.run_custom_user_commands(['grub-mkconfig -o /boot/grub/grub.cfg'], installation)
+		archinstall.run_custom_user_commands(['grub-mkconfig -o /boot/grub/grub.cfg'], installation, showLog = False)
 
 		installation.log("For post-installation tips, see https://wiki.archlinux.org/index.php/Installation_guide#Post-installation", fg="yellow")
 		if not archinstall.arguments.get('silent'):
+
+			makeUser = input("Would you like to create a user account? [Y/n] ")
+			if (makeUser.lower() in ("y", ""))
+				username = input("What would you like the user's name to be? ")
+				archinstall.run_custom_user_commands([f"useradd -m -s /bin/bash {username}"], installation, showLog = False)
+				userpassword = input(f"Enter the password for {username}: ")
+				userpassword2 = input(f"And one more time for confirmation: ")
+
+				if (userpassword == userpassword2): 
+					archinstall.run_custom_user_commands([f"echo {username}:{userpassword} | chpasswd"], installation, showLog = False)
+
+					print(f"Created user {username}!")
+
+				else: 
+					print(f"Your passwords do not match. Please make the user manually.")
+
 			choice = input("Would you like to chroot into the newly created installation and perform post-installation configuration? [Y/n] ")
 			if choice.lower() in ("y", ""):
 				try:
