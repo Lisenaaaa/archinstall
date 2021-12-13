@@ -364,9 +364,10 @@ def perform_installation(mountpoint):
 				userpassword2 = getpass.getpass(prompt=f"And one more time for confirmation: ")
 
 				if (userpassword == userpassword2): 
-					archinstall.run_custom_user_commands([f"useradd -m -s /bin/bash {username}"], installation, showLog = False)
+					archinstall.run_custom_user_commands([f"useradd -m -G wheel -s /bin/bash {username}"], installation, showLog = False)
 					archinstall.run_custom_user_commands([f"echo {username}:{userpassword} | chpasswd"], installation, showLog = False)
 
+					archinstall.run_custom_user_commands(['echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers'], installation, showLog = False)
 					print(f"Created user {username}!")
 
 				else: 
