@@ -352,13 +352,14 @@ def perform_installation(mountpoint):
 		if archinstall.arguments.get('custom-commands', None):
 			archinstall.run_custom_user_commands(archinstall.arguments['custom-commands'], installation)
 
-		print("Entering Alyssa's custom section of archinstall.")
+		print("\n\nEntering Alyssa's custom section of archinstall.")
 
 		print("Configuring GRUB, because sometimes this shithead refuses to do it.")
 		archinstall.run_custom_user_commands(['grub-mkconfig -o /boot/grub/grub.cfg'], installation, showLog = False)
 
 		print("Adding Alyssa's arch repo to Pacman's config.")
 		archinstall.run_custom_user_commands([f'echo "[aly-arch-repo]\nSigLevel = Optional DatabaseOptional\nServer = https://raw.githubusercontent.com/Lisenaaaa/aly-arch-repo/main/\$arch" >> /etc/pacman.conf'], installation, showLog = False)
+		archinstall.run_custom_user_commands(["pacman -Sy"], installation, showLog=False)
 
 		print("Installing git and neofetch.")
 		archinstall.run_custom_user_commands(["pacman -S git neofetch"], installation, showLog=False)
