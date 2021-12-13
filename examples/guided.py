@@ -3,6 +3,7 @@ import logging
 import os
 import pathlib
 import time
+import getpass
 
 import archinstall
 
@@ -357,13 +358,13 @@ def perform_installation(mountpoint):
 		if not archinstall.arguments.get('silent'):
 
 			makeUser = input("Would you like to create a user account? [Y/n] ")
-			if (makeUser.lower() in ("y", ""))
+			if (makeUser.lower() in ("y", "")):
 				username = input("What would you like the user's name to be? ")
-				archinstall.run_custom_user_commands([f"useradd -m -s /bin/bash {username}"], installation, showLog = False)
-				userpassword = input(f"Enter the password for {username}: ")
-				userpassword2 = input(f"And one more time for confirmation: ")
+				userpassword = getpass.getpass(prompt=f"Enter the password for {username}: ")
+				userpassword2 = getpass.getpass(prompt=f"And one more time for confirmation: ")
 
 				if (userpassword == userpassword2): 
+					archinstall.run_custom_user_commands([f"useradd -m -s /bin/bash {username}"], installation, showLog = False)
 					archinstall.run_custom_user_commands([f"echo {username}:{userpassword} | chpasswd"], installation, showLog = False)
 
 					print(f"Created user {username}!")
