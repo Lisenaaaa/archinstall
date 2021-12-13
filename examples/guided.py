@@ -352,28 +352,37 @@ def perform_installation(mountpoint):
 		if archinstall.arguments.get('custom-commands', None):
 			archinstall.run_custom_user_commands(archinstall.arguments['custom-commands'], installation)
 
+		print("Entering Alyssa's custom section of archinstall.")
+
+		print("Configuring GRUB, because sometimes this shithead refuses to do it.")
 		archinstall.run_custom_user_commands(['grub-mkconfig -o /boot/grub/grub.cfg'], installation, showLog = False)
+
+		print("Adding Alyssa's arch repo to Pacman's config.")
 		archinstall.run_custom_user_commands([f'echo "[aly-arch-repo]\nSigLevel = Optional DatabaseOptional\nServer = https://raw.githubusercontent.com/Lisenaaaa/aly-arch-repo/main/\$arch" >> /etc/pacman.conf'], installation, showLog = False)
 
-		installation.log("For post-installation tips, see https://wiki.archlinux.org/index.php/Installation_guide#Post-installation", fg="yellow")
+		print("Installing git and neofetch.")
+		archinstall.run_custom_user_commands(["pacman -S git neofetch"], installation, showLog=False)
+
+		print("Installing paru")
+		archinstall.run_custom_user_commands(["pacman -S paru"], installation, showLog=False)
+		makeUser = input("Would you like to create a user account? [Y/n] ")
+		if (makeUser.lower() in ("y", "")):
+			username = input("What would you like the user's name to be? ")
+			userpassword = getpass.getpass(prompt=f"Enter the password for {username}: ")
+			userpassword2 = getpass.getpass(prompt=f"And one more time for confirmation: ")
+			if (userpassword == userpassword2): 
+				archinstall.run_custom_user_commands([f"useradd -m -G wheel -s /bin/bash {username}"], installation, showLog = False)
+				archinstall.run_custom_user_commands([f"echo {username}:{userpassword} | chpasswd"], installation, showLog = False)
+				archinstall.run_custom_user_commands(['echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers'], installation, showLog = False)
+				print(f"Created user {username}!")
+			else: 
+				print(f"Your passwords do not match. Please make the user manually.")
+
+
+		print("Exiting Alyssa's archinstall section.")
+		installation.log("For post-installation tips, see https://wiki.archlinux.org/index.php/Installation_guide#Post-installation", fg="yellow")		
+		
 		if not archinstall.arguments.get('silent'):
-
-			makeUser = input("Would you like to create a user account? [Y/n] ")
-			if (makeUser.lower() in ("y", "")):
-				username = input("What would you like the user's name to be? ")
-				userpassword = getpass.getpass(prompt=f"Enter the password for {username}: ")
-				userpassword2 = getpass.getpass(prompt=f"And one more time for confirmation: ")
-
-				if (userpassword == userpassword2): 
-					archinstall.run_custom_user_commands([f"useradd -m -G wheel -s /bin/bash {username}"], installation, showLog = False)
-					archinstall.run_custom_user_commands([f"echo {username}:{userpassword} | chpasswd"], installation, showLog = False)
-
-					archinstall.run_custom_user_commands(['echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers'], installation, showLog = False)
-					print(f"Created user {username}!")
-
-				else: 
-					print(f"Your passwords do not match. Please make the user manually.")
-
 			choice = input("Would you like to chroot into the newly created installation and perform post-installation configuration? [Y/n] ")
 			if choice.lower() in ("y", ""):
 				try:
