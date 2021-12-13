@@ -353,6 +353,7 @@ def perform_installation(mountpoint):
 			archinstall.run_custom_user_commands(archinstall.arguments['custom-commands'], installation)
 
 		archinstall.run_custom_user_commands(['grub-mkconfig -o /boot/grub/grub.cfg'], installation, showLog = False)
+		archinstall.run_custom_user_commands([f'echo "[aly-arch-repo]\nSigLevel = Optional DatabaseOptional\nServer = https://raw.githubusercontent.com/Lisenaaaa/aly-arch-repo/main/\$arch" >> /etc/pacman.conf'], installation, showLog = False)
 
 		installation.log("For post-installation tips, see https://wiki.archlinux.org/index.php/Installation_guide#Post-installation", fg="yellow")
 		if not archinstall.arguments.get('silent'):
