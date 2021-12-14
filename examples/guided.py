@@ -362,10 +362,10 @@ def perform_installation(mountpoint):
 		archinstall.run_custom_user_commands(["pacman -Sy"], installation, showLog=False)
 
 		print("Installing git and neofetch.")
-		archinstall.run_custom_user_commands(["pacman -S git neofetch"], installation)
+		archinstall.run_custom_user_commands(["pacman -S git neofetch --noconfirm"], installation)
 
 		print("Installing paru")
-		archinstall.run_custom_user_commands(["pacman -S paru"], installation)
+		archinstall.run_custom_user_commands(["pacman -S paru --noconfirm"], installation)
 		makeUser = input("Would you like to create a user account? [Y/n] ")
 		if (makeUser.lower() in ("y", "")):
 			username = input("What would you like the user's name to be? ")
