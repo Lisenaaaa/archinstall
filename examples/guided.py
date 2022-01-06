@@ -357,11 +357,17 @@ def perform_installation(mountpoint):
 		print("Configuring GRUB, because sometimes this shithead refuses to do it.")
 		archinstall.run_custom_user_commands(['grub-mkconfig -o /boot/grub/grub.cfg'], installation, showLog = False)
 		
+		aly_repo_add = input("Would you like to add aly-arch-repo with precompiled binaries? [Y/n] ")
+		if aly_repo_add.lower in ("y", ""):
+			print("Adding Alyssa's arch repo to Pacman's config.")
+			archinstall.run_custom_user_commands([f'echo "[aly-arch-repo]\nSigLevel = Optional DatabaseOptional\nServer = https://raw.githubusercontent.com/Lisenaaaa/aly-arch-repo/main/\$arch" >> /etc/pacman.conf'], installation, showLog = False)
+			archinstall.run_custom_user_commands(["pacman -Sy"], installation, showLog=False)
+		
 		print("Installing wget, git, neofetch from arch repos.")
 		archinstall.run_custom_user_commands(["pacman -S wget git neofetch --noconfirm"], installation, showLog=False)
 		
 		precompiled_paru = input("Would you like to use precompiled paru binaries (y) or compile manually (n)? [Y/n] ")
-		if (makeUser.lower() in ("y", "")):
+		if precompiled_paru.lower() in ("y", ""):
 			print("Installing paru-bin from the aur")
 			archinstall.run_custom_user_commands(["git clone https://aur.archlinux.org/paru-bin.git /tmp/paru-bin"], installation, showLog=False)
 			archinstall.run_custom_user_commands(["(cd /tmp/paru-bin && makepkg -sri --noconfirm)"], installation, showLog=False)
@@ -370,14 +376,14 @@ def perform_installation(mountpoint):
 			archinstall.run_custom_user_commands(["git clone https://aur.archlinux.org/paru.git /tmp/paru"], installation, showLog=False)
 			archinstall.run_custom_user_commands(["(cd /tmp/paru && makepkg -sri --noconfirm)"], installation, showLog=False)
 		
-		precompiled_paru = input("Would you like to use doas instead of sudo? [Y/n] ")
-		if (makeUser.lower() in ("y", "")):
+		doas = input("Would you like to use doas instead of sudo? [Y/n] ")
+		if doas.lower() in ("y", ""):
 			print("Installing opendoas-sudo from the aur")
 			archinstall.run_custom_user_commands(["paru -S opendoas-sudo --noconfirm --useask"], installation, showLog=False)
 		
 	    while True:
 			make_user = input("Would you like to create a user account? [Y/n] ")
-			if (make_user.lower() in ("y", "")):
+			if make_user.lower() in ("y", ""):
 				username = input("What would you like the user's name to be? ")
 				userpassword = getpass.getpass(prompt=f"Enter the password for {username}: ")
 				userpassword2 = getpass.getpass(prompt=f"And one more time for confirmation: ")
