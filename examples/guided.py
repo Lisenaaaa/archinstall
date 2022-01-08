@@ -366,20 +366,17 @@ def perform_installation(mountpoint):
 		print("Installing wget, git, neofetch from arch repos.")
 		archinstall.run_custom_user_commands(["pacman -S wget git neofetch --noconfirm"], installation, showLog=False)
 		
-		precompiled_paru = input("Would you like to use precompiled paru binaries (y) or compile manually (n)? [Y/n] ")
-		if precompiled_paru.lower() in ("y", ""):
-			print("Installing paru-bin from the aur")
-			archinstall.run_custom_user_commands(["git clone https://aur.archlinux.org/paru-bin.git /tmp/paru-bin"], installation, showLog=False)
-			archinstall.run_custom_user_commands(["(cd /tmp/paru-bin && makepkg -sri --noconfirm)"], installation, showLog=False)
-		else:
-			print("Installing paru from the aur")
-			archinstall.run_custom_user_commands(["git clone https://aur.archlinux.org/paru.git /tmp/paru"], installation, showLog=False)
-			archinstall.run_custom_user_commands(["(cd /tmp/paru && makepkg -sri --noconfirm)"], installation, showLog=False)
-		
-		doas = input("Would you like to use doas instead of sudo? [Y/n] ")
-		if doas.lower() in ("y", ""):
-			print("Installing opendoas-sudo from the aur")
-			archinstall.run_custom_user_commands(["paru -S opendoas-sudo --noconfirm --useask"], installation, showLog=False)
+		helper = input("Would you like to install an aur helper like paru or yay? Enter \"paru\", \"yay\", or just press enter to skip. Helper: ")
+		if helper in ("yay", "paru"):
+			precompiled = input(f"Would you like to use precompiled {helper} binaries (y) or compile manually (n)? [Y/n] ")
+			if precompiled.lower() in ("y", ""):
+				print(f"Installing {helper}-bin from the aur")
+				archinstall.run_custom_user_commands([f"git clone https://aur.archlinux.org/{helper}-bin.git /tmp/{helper}-bin"], installation, showLog=False)
+				archinstall.run_custom_user_commands([f"(cd /tmp/{helper}-bin && makepkg -sri --noconfirm)"], installation, showLog=False)
+			else:
+				print(f"Installing {helper} from the aur")
+				archinstall.run_custom_user_commands([f"git clone https://aur.archlinux.org/{helper}.git /tmp/{helper}"], installation, showLog=False)
+				archinstall.run_custom_user_commands([f"(cd /tmp/{helper} && makepkg -sri --noconfirm)"], installation, showLog=False)
 		
 	    while True:
 			make_user = input("Would you like to create a user account? [Y/n] ")
